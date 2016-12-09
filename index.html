@@ -94,6 +94,8 @@
 				        
 							<li><a href="/tags/日记/">日记</a></li>
 				        
+							<li><a href="/tags/IT/">IT</a></li>
+				        
 						</ul>
 					</nav>
 					<nav class="header-nav">
@@ -106,7 +108,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/IT/" style="font-size: 10px;">IT</a> <a href="/tags/佛教/" style="font-size: 15px;">佛教</a> <a href="/tags/抗癌/" style="font-size: 20px;">抗癌</a> <a href="/tags/日记/" style="font-size: 20px;">日记</a> <a href="/tags/读书笔记/" style="font-size: 10px;">读书笔记</a>
+						<a href="/tags/IT/" style="font-size: 15px;">IT</a> <a href="/tags/佛教/" style="font-size: 15px;">佛教</a> <a href="/tags/抗癌/" style="font-size: 20px;">抗癌</a> <a href="/tags/日记/" style="font-size: 20px;">日记</a> <a href="/tags/读书笔记/" style="font-size: 10px;">读书笔记</a>
 					</div>
 				</section>
 				
@@ -160,6 +162,8 @@
 		        
 					<li><a href="/tags/日记/">日记</a></li>
 		        
+					<li><a href="/tags/IT/">IT</a></li>
+		        
 		        <div class="clearfix"></div>
 				</ul>
 			</nav>
@@ -173,6 +177,97 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-科学上网" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/09/科学上网/" class="article-date">
+  	<time datetime="2016-12-09T08:04:35.000Z" itemprop="datePublished">2016-12-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/09/科学上网/">VPS+shadowsocks-libev搭建科学上网方式</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="购买VPS-Visual-Private-Servers"><a href="#购买VPS-Visual-Private-Servers" class="headerlink" title="购买VPS (Visual Private Servers)"></a>购买VPS (Visual Private Servers)</h1><p>对比了以下VPS</p>
+<ul>
+<li><a href="https://www.vultr.com/" target="_blank" rel="external">Vultr</a></li>
+<li><a href="https://amazonlightsail.com/" target="_blank" rel="external">Amazon Lightsail</a></li>
+<li><a href="https://www.linode.com" target="_blank" rel="external">linode</a></li>
+</ul>
+<p>最终选择<a href="https://www.vultr.com/" target="_blank" rel="external">Vultr</a>，主要是因为相对便宜，而且还有优惠。</p>
+<p>选择最低配，安装Ubuntu 16.10，没有选择16.04是因为16.10的repository自带了shandowsocks-libev，直接<code>apt-get</code>即可安装。</p>
+<h1 id="VPS端安装配置shadowsocks-libev"><a href="#VPS端安装配置shadowsocks-libev" class="headerlink" title="VPS端安装配置shadowsocks-libev"></a>VPS端安装配置shadowsocks-libev</h1><p>安装</p>
+<pre><code>$ sudo apt install shadowsocks-libev
+</code></pre><p>修改配置文件</p>
+<pre><code>$ sudo vim /etc/shadowsocks-libev/config.json
+</code></pre><p>配置文件内容</p>
+<pre><code>{
+    &quot;server&quot;:&quot;127.0.0.1&quot;,    # 改为VPS的外网IP
+    &quot;server_port&quot;:8388,        # 客户端连接这个端口
+    &quot;local_port&quot;:1080,
+    &quot;password&quot;:&quot;xxxxxx&quot;,    # 密码不要轻易告诉别人
+    &quot;timeout&quot;:60,            # 默认60既可
+    &quot;method&quot;:&quot;aes-256-cfb&quot;    # 推荐加密使用
+}
+</code></pre><p>启动服务</p>
+<pre><code>$ /etc/init.d/shadowsocks-libev start
+</code></pre><h1 id="使用supervisor监控服务"><a href="#使用supervisor监控服务" class="headerlink" title="使用supervisor监控服务"></a>使用<a href="http://supervisord.org/index.html" target="_blank" rel="external">supervisor</a>监控服务</h1><p>安装supervisor</p>
+<pre><code>$ sudo pip install supervisor
+</code></pre><p>修改配置文件</p>
+<pre><code>$ sudo vim /etc/supervisord
+</code></pre><p>添加如下内容</p>
+<pre><code>[program:shadowsocks-libev]
+command=/usr/bin/ss-server -c /etc/shadowsocks-libev/config.json -u
+user=nobody
+</code></pre><p>启动</p>
+<pre><code>$ sudo supervisord
+</code></pre><h1 id="安装配置shadowsocks客户端"><a href="#安装配置shadowsocks客户端" class="headerlink" title="安装配置shadowsocks客户端"></a>安装配置shadowsocks客户端</h1><p>根据客户端下载对应的安装文件，(<a href="https://shadowsocks.com/client.html" target="_blank" rel="external">https://shadowsocks.com/client.html</a>)</p>
+<p>添加服务器配置：地址、加密方式、密码与服务端对应。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IT/">IT</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-965P-DS3主板-E6300超频" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -353,18 +448,19 @@
       
         <p>三宝：佛，法，僧</p>
 <p>三藏：经，律，论</p>
-<p>五戒：不杀生，不偷盗，不邪淫，不妄语，不饮酒</p>
 <p>四大：地，水，火，风</p>
-<p>六道：天，阿修罗，人，畜生，恶鬼，地狱</p>
 <p>四谛：苦，集，灭，道</p>
-<p>八苦：生，老，病，死，怨憎恶，爱别离，求不得，五取蕴</p>
-<p>十二因缘：无明，行，识，名色，六入，触，受，爱，取，有，生，老死</p>
+<p>五蕴（五阴，名色）：色，受，想，行，识。名：受想行识</p>
+<p>五欲：色，声，香，味，触</p>
+<p>五戒：不杀生，不偷盗，不邪淫，不妄语，不饮酒</p>
+<p>六道：天，阿修罗，人，畜生，恶鬼，地狱</p>
 <p>六根（六识）：眼，耳，鼻，舌，身，意</p>
 <p>六入（六尘）：色，声，香，味，触，法</p>
-<p>五蕴（五阴，名色）：色，受，想，行，识。名：受想行识</p>
 <p>六度：布施，持戒，忍辱，精进，禅定，般若</p>
+<p>八苦：生，老，病，死，怨憎恶，爱别离，求不得，五取蕴</p>
 <p>八正道：正见，正思维，正语，正业，正命，正精进，正念，正定</p>
 <p>佛十号（如来十号，十种通号）：如来，应供，正遍知，明行足，善逝，世间解无上士，调御丈夫，天人师，佛，世尊</p>
+<p>十二因缘：无明，行，识，名色，六入，触，受，爱，取，有，生，老死</p>
 
       
     </div>
@@ -767,78 +863,6 @@
 <li>拿审批单，社保卡，就诊卡到医保办变更特病身份，就办理完特病了。</li>
 </ol>
 <p>门特不是在普通门诊的收费处收费，是单独的一个窗口，且只能用现金。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/抗癌/">抗癌</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/日记/">日记</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-定位1" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/06/定位1/" class="article-date">
-  	<time datetime="2016-05-06T08:51:22.000Z" itemprop="datePublished">2016-05-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/06/定位1/">定位1</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>肿瘤医院的靶区定位分为CT模拟定位和MR模拟定位，将两次的定位数据进行融合计算出靶区。</p>
-<p>按照约定，早上八点来到医院。本以为定位很简单，我就只身前往了，但因为要做增强CT，需要注射造影剂，必须要家属陪同，所以不能做，等于白起了个大早。</p>
-<p>于是我的负责医生苏医生为我简历病案，详细询问了我的病情发展以及检查的过程。然后苏医生的上级刘医生带着苏医生给我查体，这时我才知道我原来是苏医生在肿瘤医院接的第一位鼻咽患者。不过没关系，治疗方案是诊室共同确定的，还要经过整个放疗外科科室的两次核查，只不过要被作为学习材料和标本对待了。</p>
-<p>治疗期间每周都要查体，查体包括如下内容：</p>
-<ul>
-<li>摸淋巴结的大小，看每次的变化。</li>
-<li>查看鼻咽部的情况。</li>
-<li>用棉签触碰面部不同位置，让患者指出，看放疗是否对面部触觉造成影响。</li>
-<li>观察面前手的移动，确认视神经有没有受损。</li>
-<li>在头两侧用纸摩擦发声，测量双耳的听力。</li>
-<li>测量张口的上下幅度，我这次是5cm。</li>
-<li>感受抬头，低头，转头的力量。</li>
-</ul>
-<p>下午老爸从家跑过来，陪我做了增强CT，辛苦老爸了。在做CT前，要把面罩最好。本以为面罩的做法技术含量很高，没准还得用到3D打印，不过实际情况确实很粗暴很直接。我躺下之后，将加热过的网状塑料扣在我的肩部以上，并固定在CT台上，加热的塑料可变形，等冷却后面具就做好了。</p>
-<p>以后每次放疗都要用面罩把我固定在台子上，让我不能动弹。医生又在我的胸前画了一条竖线作为位置标识，这条线将陪伴我整个放疗过程，如果变浅了还要重新描好。</p>
-<p>定位第一阶段就结束了，周一做MR定位。</p>
 
       
     </div>
